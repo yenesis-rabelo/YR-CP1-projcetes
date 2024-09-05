@@ -1,3 +1,4 @@
-#Yenesis Rabelo, first programing project
+import random 
 
-print("Hello Yenesis!")
+num + random.randint(1,20)
+print("Hello Yenesis!", num)
