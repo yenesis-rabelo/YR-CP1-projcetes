@@ -1,0 +1,10 @@
+#Yenesis Rabelo Simple Calculator
+number_1=float (input("Type a number"))
+number_2=float (input("Type a another number"))
+print(str(number_1)+" plus "+str(number_2)+" equals "+str(number_1 + number_2))
+print(str(number_1)+" minus "+str(number_2)+" equals "+str(number_1 - number_2))
+print(str(number_1)+" times "+str(number_2)+" equals "+str(number_1 * number_2))
+print(str(number_1)+" divided by "+str(number_2)+" equals "+str(number_1 / number_2))
+print(str(number_1)+" to the power of "+str(number_2)+" equals "+str(number_1 ** number_2))
+print(str(number_1)+" divided by "+str(number_2)+" and rounded down equals"+str(number_1 // number_2))
+print(str(number_1)+" mod "+str(number_2)+" equals "+str(number_1 % number_2))
