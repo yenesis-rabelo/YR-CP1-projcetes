@@ -1,4 +1,4 @@
-#Yenesis Rabelo Casting Test
+#Yenesis Rabelo Personal Information Converter
 name = input("what is your name?")
 age = input("what is your age?")
 height = input("what is your height in meters")
