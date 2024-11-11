@@ -1,25 +1,30 @@
 #Yenesis Rabelo What is happening 
 
+#defining the account number and balance
 class BankAccount:
     def __init__(self, account_number, balance=0):
         self.account_number = account_number
         self.balance = balance
 
+#when the amount is blank then it will nreturn true
     def deposit(self, amount):
         if amount > 0:
             self.balance += amount
             return True
         return False
 
+#when amount is blank you are able to get money out of the account
     def withdraw(self, amount):
         if 0 < amount <= self.balance:
             self.balance -= amount
             return True
         return False
 
+#return balance
     def get_balance(self):
         return self.balance
 
+#the user inputs their account number and balance
 def create_account():
     account_number = input("Enter account number: ")
     # ensuring the valid numeric balance
@@ -34,6 +39,7 @@ def create_account():
             print("Invalid input. Please enter a valid number for the initial balance.")
     return BankAccount(account_number, initial_balance)
 
+#user is still inputting account number
 def get_account(accounts):
     account_number = input("Enter account number: ")
     account = accounts.get(account_number)
@@ -41,6 +47,7 @@ def get_account(accounts):
         print("Account not found.")
     return account
 
+#prints the inputted information
 def main():
     accounts = {}
     
@@ -51,6 +58,7 @@ def main():
         print("4. Check Balance")
         print("5. Exit")
         
+        #what happens when you enter a specific number from 1-5
         choice = input("Enter your choice (1-5): ")
         
         if choice == '1':
