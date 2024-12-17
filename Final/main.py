@@ -1,140 +1,85 @@
 import random
-import time
 
-# Player class to handle stats and actions
-class Player:
-    def __init__(self, strength, health, defense):
-        self.strength = strength
-        self.health = health
-        self.defense = defense
-        self.inventory = []
-        self.explored_rooms = set()
-    
-    def increase_stat(self, stat):
-        if stat == "strength":
-            self.strength += 1
-        elif stat == "health":
-            self.health += 10
-        elif stat == "defense":
-            self.defense += 1
-    
-    def take_damage(self, amount):
-        self.health -= max(amount - self.defense, 0)
-    
-    def heal(self, amount):
-        self.health += amount
+# Function to handle combat with enemies
+def combat(enemy):
+    combat_options = ["Attack", "Defend", "Use Item"]
+    print(f"A wild {enemy} appears!")
+    while True:
+        print("Choose an action: ")
+        for i, option in enumerate(combat_options):
+            print(f"{i + 1}. {option}")
+        try:
+            choice = int(input("Enter your choice (1-3): ")) - 1
+            if choice == 0:  # Attack
+                print(f"You attack the {enemy}!")
+                print(f"You defeated the {enemy}!")
+                return True  
+            elif choice == 1:  # Defend
+                print(f"You defend against the {enemy}!")
+                print(f"You successfully defended the {enemy}'s attack!")
+                continue  # Let the player defend again
+            elif choice == 2:  # Use Item
+                print("You use a health potion!")
+                print("You restored some health!")
+                continue
+            else:
+                print("Invalid option. Try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number between 1 and 3.")
 
-    def pick_up_item(self, item):
-        self.inventory.append(item)
-    
-    def use_item(self, item):
-        if item == "key":
-            print("You used the key.")
-            self.inventory.remove(item)
+# Function to explore doors and collect puzzle pieces
+def explore_doors():
+    doors = ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5", "Room 6"]
+    puzzle_pieces = []
+    for door in doors:
+        print(f"Opening {door}...")
+        enemy = f"Enemy in {door}"
+        combat(enemy)  # 
+        puzzle_pieces.append(f"Piece from {door}")
+        print(f"You collected a puzzle piece from {door}!")
+        if len(puzzle_pieces) == 6:  # Collecting all pieces
+            print("You collected all the puzzle pieces!")
+            break  # Exit after collecting all pieces
+    return puzzle_pieces
 
-# Combat function
-def combat(player, enemy):
-    while player.health > 0 and enemy['health'] > 0:
-        action = input(f"Your health: {player.health}, Enemy health: {enemy['health']}\nChoose an action: 'attack' or 'defend': ").lower()
-        if action == 'attack':
-            damage = random.randint(1, player.strength)
-            enemy['health'] -= damage
-            print(f"You attacked the enemy for {damage} damage!")
-        elif action == 'defend':
-            player.defense += 2  # Temporary defense boost
-            print(f"You defend and increase your defense!")
-        
-        # Enemy attacks back
-        if enemy['health'] > 0:
-            enemy_damage = random.randint(1, enemy['strength'])
-            player.take_damage(enemy_damage)
-            print(f"The enemy attacked you for {enemy_damage} damage!")
-        
-        if player.health <= 0:
-            print("You died. Game over!")
-            return False
-    
-    print("You defeated the enemy!")
-    return True
-
-# Room functions
-def room_1(player):
-    # Room where player fights small enemies
-    print("You are in room 1. Enemies approach!")
-    enemies = [{'health': 30, 'strength': 5} for _ in range(20)]
-    
-    for enemy in enemies:
-        if not combat(player, enemy):
-            return False  # If player dies during combat, return False
-    
-    print("All enemies defeated!")
-    return True
-
-def room_2(player):
-    # Room where player collects elevator pieces
-    print("You are in room 2. There are 6 doors.")
-    pieces = 0
-    while pieces < 6:
-        door_choice = input("Choose a door to explore (1-6): ")
-        door_choice = int(door_choice) - 1
-        if door_choice not in player.explored_rooms:
-            player.explored_rooms.add(door_choice)
-            enemy = {'health': 50, 'strength': 7}
-            if not combat(player, enemy):
-                return False
-            pieces += 1
-            print(f"You've found a piece! Total pieces: {pieces}")
-        else:
-            print("You've already explored this door.")
-    print("You collected all elevator pieces!")
-    return True
-
-def puzzle_room(player):
-    # Room with two puzzles
-    print("You're at the puzzle room. Choose a door to proceed:")
-    puzzle_choice = input("Enter '1' for maze, '2' for riddle: ")
-    
-    if puzzle_choice == '1':
-        print("Solve the maze puzzle!")
-        time_limit = time.time() + 10 * 60  # 10-minute timer
-        while time.time() < time_limit:
-            maze_solution = input("Solve the maze: [type 'exit' to give up]: ")
-            if maze_solution.lower() == "exit":
-                print("You gave up. Game over!")
-                return False
-            if maze_solution.lower() == "correct":  # Placeholder for correct answer
-                print("You solved the maze!")
-                return True
-        print("Time's up!")
-        return False
-    
-    elif puzzle_choice == '2':
-        print("Solve the riddle!")
-        riddle_answer = input("I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I? ")
-        if riddle_answer.lower() == "echo":
-            print("Correct! You solved the riddle.")
+# Function for the puzzles on the second floor
+def solve_puzzles():
+    print("You're on the second floor! Choose a puzzle to solve:")
+    puzzles = ["Maze", "Riddle"]
+    while True:
+        choice = input(f"Pick a puzzle: {puzzles[0]} or {puzzles[1]}: ").lower()
+        if choice == "maze":
+            print("You are navigating through the maze!")
+            print("You solved the maze and collected the key!")
+            return True
+        elif choice == "riddle":
+            print("You are solving the riddle!")
+            print("You solved the riddle and collected the key!")
             return True
         else:
-            print("Wrong answer. Game over!")
-            return False
-    return False
+            print("Invalid choice. Please choose again.")
 
-# Game loop and logic
-def start_game():
-    player = Player(strength=5, health=100, defense=2)
-    print("You have 10 seconds to prepare for battle...")
-    time.sleep(10)  # Simulate preparation time
+# Main function to run the game
+def game():
+    print("Welcome to the adventure game!")
     
-    if not room_1(player):  # Combat in room 1
-        return  # If player dies, game ends
+    # Combat section (2 enemies)
+    for i in range(1, 3):
+        print(f"\nBattle {i}:")
+        combat(f"Enemy {i}")  
+        print(f"Enemy {i} defeated!")
     
-    if not room_2(player):  # Collecting elevator pieces
-        return  # If player dies, game ends
+    # After defeating the 2 enemies, explore doors
+    print("\nYou defeated all enemies! Now, explore the doors.")
+    puzzle_pieces = explore_doors()
     
-    if not puzzle_room(player):  # Puzzle room
-        return  # If player fails puzzle, game ends
-    
-    print("Congratulations! You've escaped!")
-    
+    # If all puzzle pieces are collected, solve puzzles on the second floor
+    if len(puzzle_pieces) == 6:
+        print("\nYou collected all the puzzle pieces! The elevator is now open.")
+        if solve_puzzles():
+            print("You escaped successfully!")
+        else:
+            print("Game over. Try again!")
+
 # Start the game
-start_game()
+game()
